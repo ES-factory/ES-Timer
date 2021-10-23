@@ -1,8 +1,11 @@
-#define INCLUDE_OLED       0
+#define INCLUDE_OLED          false    // Change it to true if you assemble monitor version
+#define BRIGHTNESS_OLED       0.5      // In Range of 0 to 1
+#define FLIP_VERTICAL_CONTENT false    // If you have connect your ES Timer to right side of computer must change it to true 
 
 #include <ESTimer.h>
 #if INCLUDE_OLED
 #include "Fonts.h"
+#include "Images.h"
 #endif
 
 #define seconds(n) (n)
@@ -50,6 +53,9 @@ void initTimer() {
   EEPROM.get(8, countDonePomodoros);
 
 #if INCLUDE_OLED
+#if FLIP_VERTICAL_CONTENT
+  ESTimer.flipVerticalContent();
+#endif
   splash();
 
   initNumbers();
@@ -126,6 +132,12 @@ void startCountdownTimer(bool isAwake) {
 }
 
 #if INCLUDE_OLED
+void splash() {
+  ESTimer.drawBitmap(46, 0, 82, 8, es_logo);
+  ESTimer.delay(3000);
+  ESTimer.clear();
+}
+
 void drawNumbers(uint8_t m0, uint8_t m1, uint8_t s0, uint8_t s1) {
   ESTimer.drawBitmap(65, 1, 100, 4, numbers[m0]);
   ESTimer.drawBitmap(65, 4, 100, 7, numbers[m1]);
@@ -136,12 +148,6 @@ void drawNumbers(uint8_t m0, uint8_t m1, uint8_t s0, uint8_t s1) {
 void initNumbers() {
   uint8_t t = 0;
   drawNumbers(t, t, t, t);
-}
-
-void splash() {
-  ESTimer.drawBitmap(46, 0, 82, 8, es_logo);
-  ESTimer.delay(3000);
-  ESTimer.clear();
 }
 
 void initStatusPomodoros() {

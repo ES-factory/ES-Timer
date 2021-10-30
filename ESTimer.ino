@@ -106,6 +106,8 @@ void startCountdownTimer(bool isAwake) {
   }
 
   do {
+    uint16_t previousTime = (uint16_t) millis();
+
 #if INCLUDE_OLED
     uint8_t m0 = (totalTime / 60) / 10;
     uint8_t m1 = (totalTime / 60) % 10;
@@ -115,18 +117,11 @@ void startCountdownTimer(bool isAwake) {
     drawNumbers(m0, m1, s0, s1);
 #endif
 
-    if (isAwake) {
-      EEPROM.put(0, totalTime);
-    } else {
-      EEPROM.put(4, totalTime);
+    EEPROM.put(isAwake ? 0 : 4, totalTime);
+    if (!isAwake) {
       ESTimer.goToSleepMode();
     }
-
-#if INCLUDE_OLED
-    ESTimer.delay(845);
-#else
-    ESTimer.delay(1000);
-#endif
+    ESTimer.delay(1000 - ((uint16_t) millis() - previousTime));
 
   } while (totalTime-- > 0);
 }
@@ -151,22 +146,21 @@ void initNumbers() {
 }
 
 void initStatusPomodoros() {
-  for (uint8_t i = 0; i < 16; i += 2) {
-    if (i < 8) {
-      ESTimer.drawBitmap(108, i, 124, i + 2, dots[(countDonePomodoros / 8) % 2]);
-    } else {
-      ESTimer.drawBitmap(4, i - 8, 20, (i - 8) + 2, dots[(countDonePomodoros / 8) % 2]);
-    }
+  for (uint8_t i = 0; i < 8; i++) {
+    drawPomodoro(i, dots[(i <= countDonePomodoros % 8) ^ ((countDonePomodoros / 8) % 2)]);
   }
 }
 
 void updateStatusPomodoros() {
-  for (uint8_t i = 0; i < ((countDonePomodoros % 8) + 1) * 2; i += 2) {
-    if (i < 8) {
-      ESTimer.drawBitmap(108, i, 124, i + 2, dots[((countDonePomodoros / 8) + 1) % 2]);
-    } else {
-      ESTimer.drawBitmap(4, i - 8, 20, (i - 8) + 2, dots[((countDonePomodoros / 8) + 1) % 2]);
-    }
+  uint8_t i = countDonePomodoros % 8;
+  drawPomodoro(i, dots[((countDonePomodoros / 8) + 1) % 2]);
+}
+
+void drawPomodoro(uint8_t index, const uint8_t *s) {
+  if (index < 4) {
+    ESTimer.drawBitmap(108, 2 * index, 124, (2 * index) + 2, s);
+  } else {
+    ESTimer.drawBitmap(4, 2 * (index % 4), 20, (2 * (index % 4)) + 2, s);
   }
 }
 #endif

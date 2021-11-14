@@ -61,7 +61,7 @@ After opening the file  `EsTimer.ino` in `Arduino IDE` In order to be able to up
 If you have assembled the monitor version, you need to change the value of `INCLUDE_OLED` to `true`. Now to upload the code in `ES Timer` click on the arrow button or use shortcut `Ctrl + U`. Wait for the code to be compiled. After you see the `Please plug in the device ...` message. Connect the device to the computer. After a maximum of 5 seconds, the code will be uploaded. Congratulations 🎉, your ES Timer is ready to use.
 
 ## Configurations
-You can customize the awake and sleep system. All you have to do is change the definition values of `AWAKE_TIME` and `SLEEP_TIME` also, if you want you can change the brightness OLED by changing `BRIGHTNESS_OLED` defines in range of `0..1` and if you have connected your ES Timer to right side of computer must change `FLIP_VERTICAL_CONTENT` to `true`
+You can customize the awake and sleep system. All you have to do is change the definition values of `AWAKE_TIME` and `SLEEP_TIME` also, if you want you can change the brightness OLED by changing `BRIGHTNESS_OLED` defines in range of `0..1` and if you have connected your ES Timer to right side of computer should change `FLIP_CONTENT` to `true` and you can also change the value of `BE_SAVE_TIMER_STATUS` to `false` in order to disable timer mode saving (sleep & rest).
 
 **Note 📝**: According to the code, the maximum definition time for `AWAKE_TIME` is 99 minutes and for `SLEEP_TIME` is a quarter `AWAKE_TIME`.
 

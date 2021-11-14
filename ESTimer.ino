@@ -1,6 +1,8 @@
 #define INCLUDE_OLED          false    // Change it to true if you assemble monitor version
 #define BRIGHTNESS_OLED       0.5      // In Range of 0 to 1
-#define FLIP_VERTICAL_CONTENT false    // If you have connect your ES Timer to right side of computer must change it to true 
+#define FLIP_CONTENT          false    // If you have connect your ES Timer to right side of computer should change it to true 
+
+#define BE_SAVE_TIMER_STATUS  true     // If you don't want to save status of the timer (awake and sleep), change it to false
 
 #include <ESTimer.h>
 #if INCLUDE_OLED
@@ -13,13 +15,15 @@
 
 #define AWAKE_TIME min(minutes(25), minutes(99))
 #define SLEEP_TIME min(minutes(5), AWAKE_TIME / 4)
-#define LED_PIN 1
 
-int previousAwakeTime = 0;
-int previousSleepTime = 0;
+#define LED_PIN 1
+#define TIMER_STATUS_ADDRESS 0
+#define COUNT_DP_ADDRESS     TIMER_STATUS_ADDRESS + sizeof(timerStatus)
+
+bool timerStatus = true;
 uint8_t countDonePomodoros = 0;
 
-volatile bool isCompletedRest = false;
+bool isCompletedRest = false;
 
 void setup() {
   initTimer();
@@ -33,9 +37,9 @@ void loop() {
 #if INCLUDE_OLED
       updateStatusPomodoros();
 #endif
-      startCountdownTimer(false);
+      startCountdownTimer();
 
-      EEPROM.put(8, ++countDonePomodoros);
+      EEPROM.put(COUNT_DP_ADDRESS, ++countDonePomodoros);
       isCompletedRest = true;
     }
     flashLight();
@@ -50,11 +54,11 @@ void loop() {
 void initTimer() {
   DDRB |= 0b10; // pinMode(LED_PIN, OUTPUT);
 
-  EEPROM.get(8, countDonePomodoros);
+  EEPROM.get(COUNT_DP_ADDRESS, countDonePomodoros);
 
 #if INCLUDE_OLED
-#if FLIP_VERTICAL_CONTENT
-  ESTimer.flipVerticalContent();
+#if FLIP_CONTENT
+  ESTimer.flipContent();
 #endif
   splash();
 
@@ -66,20 +70,19 @@ void initTimer() {
 void startTimer() {
   PORTB &= 0b01; // digitalWrite(LED_PIN, LOW);
 
-  EEPROM.get(0, previousAwakeTime);
-  EEPROM.get(4, previousSleepTime);
+#if BE_SAVE_TIMER_STATUS
+  EEPROM.get(TIMER_STATUS_ADDRESS, timerStatus);
+#endif
 
-  if (previousSleepTime == 0) {
+  if (timerStatus) {
 #if INCLUDE_OLED
     updateStatusPomodoros();
 #endif
 
     if (!ESTimer.onSleepMode()) {
-      startCountdownTimer(true);
+      startCountdownTimer();
     } else {
-      while (ESTimer.onSleepMode()) {
-        flashLight();
-      }
+      while (ESTimer.onSleepMode()) flashLight();
       startTimer();
     }
   }
@@ -97,13 +100,8 @@ void flashLight() {
   PORTB &= 0b01; // digitalWrite(LED_PIN, LOW);
 }
 
-void startCountdownTimer(bool isAwake) {
-  int totalTime;
-  if (isAwake) {
-    totalTime = previousAwakeTime > 0 ? previousAwakeTime : AWAKE_TIME;
-  } else {
-    totalTime = previousSleepTime > 0 ? previousSleepTime : SLEEP_TIME * ((countDonePomodoros + 1) % 4 == 0 ? 4 : 1);
-  }
+void startCountdownTimer() {
+  uint16_t totalTime = timerStatus ? AWAKE_TIME : SLEEP_TIME * ((countDonePomodoros + 1) % 4 == 0 ? 4 : 1);
 
   do {
     uint16_t previousTime = (uint16_t) millis();
@@ -117,13 +115,15 @@ void startCountdownTimer(bool isAwake) {
     drawNumbers(m0, m1, s0, s1);
 #endif
 
-    EEPROM.put(isAwake ? 0 : 4, totalTime);
-    if (!isAwake) {
-      ESTimer.goToSleepMode();
-    }
-    ESTimer.delay(1000 - ((uint16_t) millis() - previousTime));
+    if (!timerStatus) ESTimer.goToSleepMode();
 
+    ESTimer.delay(1000 - ((uint16_t) millis() - previousTime));
   } while (totalTime-- > 0);
+
+  timerStatus = !timerStatus;
+#if BE_SAVE_TIMER_STATUS
+  EEPROM.put(TIMER_STATUS_ADDRESS, timerStatus);
+#endif
 }
 
 #if INCLUDE_OLED
@@ -156,11 +156,14 @@ void updateStatusPomodoros() {
   drawPomodoro(i, dots[((countDonePomodoros / 8) + 1) % 2]);
 }
 
-void drawPomodoro(uint8_t index, const uint8_t *s) {
-  if (index < 4) {
-    ESTimer.drawBitmap(108, 2 * index, 124, (2 * index) + 2, s);
-  } else {
-    ESTimer.drawBitmap(4, 2 * (index % 4), 20, (2 * (index % 4)) + 2, s);
-  }
+void drawPomodoro(uint8_t index, const byte *s) {
+  uint8_t rowOffset = index < 4 ? 104 : 0;
+  ESTimer.drawBitmap(
+    4 + rowOffset,
+    2 * (index % 4),
+    20 + rowOffset,
+    (2 * (index % 4)) + 2,
+    s
+  );
 }
 #endif

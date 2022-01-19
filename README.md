@@ -111,7 +111,7 @@ Congratulations 🎉, your ES Timer is ready to use.
 | :---: | :---: |
 | <img src="/media/monitor_version.gif" width="200px"> | <img src="/media/only_digispark.gif" width="200px"> |
 
-[<img src="/media/youtube.png" width="560" height="315">](https://www.youtube.com/watch?v=Ut2UdHNUHx0)
+[<img src="/media/youtube.png" width="560">](https://www.youtube.com/watch?v=Ut2UdHNUHx0)
 
 ## Donations
 This is free, open-source software and instrument. If you'd like to support the development of future projects, or say thanks for this one, you can donate:

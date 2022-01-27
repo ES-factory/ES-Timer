@@ -33,7 +33,7 @@ As mentioned, this timer works according to the `Pomodoro technique`, which you 
 - For monitor version (Optional)
   - Female and male pin header standard
   - LED
-  - PCB
+  - PCB prototype board
   - Soldering iron and wire
   - SSD1306 I2C OLED
   - Wire

@@ -2,7 +2,7 @@
 <img src="/media/usb_pomodoro_timer.png" align="right" 
      alt="ES Timer" width="175" height="180">
 
-Powered⚡ by `Digispark ATtiny85` and it works based on 🍅 pomodoro time management technique a timer especially for those who deal with computers a lot, such as freelancers and have difficulty managing time. 
+A product from [ES Factory](https://www.instagram.com/es_factory_official/), powered⚡ by Digispark ATtiny85 and it works based on 🍅 pomodoro time management technique a timer especially for those who deal with computers a lot, such as freelancers and have difficulty managing time. 
 
 Features of ES Timer in compare to existing softwares:
 - forcing to follow the breaks between tasks
@@ -13,7 +13,7 @@ Features of ES Timer in compare to existing softwares:
 1. [How it works](#how-it-works)
 2. [Requirements](#requirements) 
 3. [Assemble monitor version](#assemble-monitor-version) (Optional)
-4. [Update from v1.x.x to v2.0.0](#update-from-v1xx-to-v200)
+4. [Update from v1.x.x to v2.x.x](#update-from-v1xx-to-v2xx)
 5. [Initialization Arduino IDE and Digispark ATtiny85](#initialization-arduino-ide-and-digispark-attiny85)
 6. [Upload code](#upload-code)
 7. [Configurations](#configurations)
@@ -55,7 +55,7 @@ As mentioned, this timer works according to the `Pomodoro technique`, which you 
 5. According to the picture of the fifth step, do wiring and solder  on the back of pcb.
 6. In the end, put OLED and LED on pin headers, in this moment your ES Timer is ready for next step.
 
-## Update from v1.x.x to v2.0.0
+## Update from v1.x.x to v2.x.x
 If you have used version 1.x.x ES Timer before, in order to update its, you must first delete the ES timer and EEPROM folders in the library folder of Arduino IDE which you can usually be found in the `C:\Users\USER\Documents\Arduino\libraries` path and update the bootloader of digispark attiny85 for this purpose, follow next step.
 
 ## Initialization Arduino IDE and Digispark ATtiny85
@@ -95,23 +95,26 @@ Congratulations 🎉, your ES Timer is ready to use.
 
 | Definition | description |
 | :--- | :--- |
-| [`SYSTEM_OS`](/ESTimer.ino#L5) | To go to the Lock screen, you must specify your operating system type (WINDOWS or LINUX or MACOS). |
-| [`INCLUDE_OLED`](/ESTimer.ino#L7) | Change it to true if you assemble monitor version. |
-| [`ADDRESS_OLED`](/ESTimer.ino#L8) | Usually the ssd1306 address is this value, but if your ssd1306 value was different you can change it (use Digispark_Examples/i2cScanner to get it). |
-| [`BRIGHTNESS_OLED`](/ESTimer.ino#L9) | In the range 0 to 1, where 1 is the maximum OLED brightness and 0 means it is completely off. |
-| [`FLIP_CONTENT_OLED`](/ESTimer.ino#L10) | If you have connect your ES Timer to usb port of right side of computer should change it to true. |
-| [`WORK_DURATION`](/ESTimer.ino#L12) | The duration of each work can be a maximum of 99 minutes, which you can use up to a second accuracy. |
-| [`SHORT_BREAK_DURATION`](/ESTimer.ino#L13) | The duration of each short break can be a maximum of one-fifth work time, which you can use up to a second accuracy. |
-| [`LONG_BREAK_RATE`](/ESTimer.ino#L14) | There should be take a long break after all four pomodoros, which is four times the short break by default. |
-| [`PAUSABLE_WORK_PHASE`](/ESTimer.ino#L15) | If you want the work phase counter to pause when the timer is unplugged and resume it when again plugged, change it to true. |
+| [`SYSTEM_OS`](/ESTimer.ino#L8) | To go to the Lock screen, you must specify your operating system type (WINDOWS or LINUX or MACOS). |
+| [`INCLUDE_OLED`](/ESTimer.ino#L10) | Change it to true if you assemble monitor version. |
+| [`ADDRESS_OLED`](/ESTimer.ino#L11) | Usually the ssd1306 address is this value, but if your ssd1306 value was different you can change it (use Digispark_Examples/i2cScanner to get it). |
+| [`BRIGHTNESS_OLED`](/ESTimer.ino#L12) | In the range 0 to 1, where 1 is the maximum OLED brightness and 0 means it is completely off. |
+| [`FLIP_CONTENT_OLED`](/ESTimer.ino#L13) | If you have connect your ES Timer to usb port of right side of computer should change it to true. |
+| [`WORK_DURATION`](/ESTimer.ino#L15) | The duration of each work can be a maximum of 99 minutes, which you can use up to a second accuracy. |
+| [`SHORT_BREAK_DURATION`](/ESTimer.ino#L16) | The duration of each short break can be a maximum of one-fifth work time, which you can use up to a second accuracy. |
+| [`LONG_BREAK_RATE`](/ESTimer.ino#L17) | There should be take a long break after all four pomodoros, which is four times the short break by default. |
+| [`SHORT_BREAK_COUNTER`](/ESTimer.ino#L18]) | The method of counting short break for long break, STATIC according by done pomodoros, DYNAMIC after plugging timet to system. |
+| [`PAUSABLE_WORK_PHASE`](/ESTimer.ino#L19) | If you want the work phase counter to pause when the timer is unplugged and resume it when again plugged, change it to true. |
 
 ## Demos
 
+| **Video** |
+| :---: |
+| [<img src="/media/youtube.png" width="560px">](https://www.youtube.com/watch?v=Ut2UdHNUHx0) |
+
 | **Monitor version** | **Only  digispark** |
 | :---: | :---: |
-| <img src="/media/monitor_version.gif" width="200px"> | <img src="/media/only_digispark.gif" width="200px"> |
-
-[<img src="/media/youtube.png" width="560">](https://www.youtube.com/watch?v=Ut2UdHNUHx0)
+| <img src="/media/monitor_version.gif" width="200px"> | <img src="/media/only_digispark.gif" width="200px"> | 
 
 ## Donations
 This is free, open-source software and instrument. If you'd like to support the development of future projects, or say thanks for this one, you can donate:

@@ -2,6 +2,9 @@
 #define LINUX                 0x02
 #define MACOS                 0x03
 
+#define STATIC                0x04
+#define DYNAMIC               0x05
+
 #define SYSTEM_OS             WINDOWS                  // To go to the Lock screen, you must specify your operating system type (WINDOWS or LINUX or MACOS).
 
 #define INCLUDE_OLED          false                    // Change it to true if you assemble monitor version.
@@ -12,6 +15,7 @@
 #define WORK_DURATION         minutes(25) + seconds(0) // The duration of each work can be a maximum of 99 minutes, which you can use up to a second accuracy.
 #define SHORT_BREAK_DURATION  minutes(5) + seconds(0)  // The duration of each short break can be a maximum of one-fifth work time, which you can use up to a second accuracy.
 #define LONG_BREAK_RATE       4.0                      // There should be take a long break after all four pomodoros, which is four times the short break by default.
+#define SHORT_BREAK_COUNTER   STATIC                   // The method of counting short break, STATIC according by done pomodoros, DYNAMIC after plugging timet to system.
 #define PAUSABLE_WORK_PHASE   false                    // If you want the work phase counter to pause when the timer is unplugged and resume it when again plugged, change it to true.
 
 #define _WORK_DURATION min(WORK_DURATION, minutes(99))
@@ -38,6 +42,7 @@ TimerPhase currentTimerPhase = WORK;
 uint16_t workTime = _WORK_DURATION;
 uint16_t offsetRCD = 0;
 uint8_t countPomodoros = 0;
+uint8_t dynamicCountPomodoros = 0;
 uint16_t remainingCountdownTime = 0;
 
 void setup() {
@@ -108,13 +113,14 @@ void startTimerBreakPhase() {
 
 void increaseCountPomodoros() {
   EEPROM.put(COUNT_POMODO_ADDRESS, ++countPomodoros);
+  dynamicCountPomodoros++;
 }
 
 void awaitToNextPomodoroRequest() {
-  while (!ESTimer.receivedRequestFromUser()) turnOnOffLEDWithDelay();
+  while (!ESTimer.receivedRequestFromUser()) blinkLED();
 }
 
-void turnOnOffLEDWithDelay() {
+void blinkLED() {
   turnOnLED();
   ESTimer.delay(500);
   turnOffLED();
@@ -185,9 +191,13 @@ TimerPhase getNextTimerPhase() {
     case LONG_BREAK:
       return WORK;
     default:
-      uint8_t nextPomodoro = countPomodoros + 1;
+      uint8_t nextPomodoro = currentCountPomodoros() + 1;
       return nextPomodoro % 4 ? SHORT_BREAK : LONG_BREAK;
   }
+}
+
+uint8_t currentCountPomodoros() {
+  return SHORT_BREAK_COUNTER == DYNAMIC ? dynamicCountPomodoros : countPomodoros;
 }
 
 void initOLED() {
@@ -211,7 +221,7 @@ void showTimerCounter() {
 
 void showCompletedTimerPomodoros() {
   for (uint8_t index = 0; index < 8; index++) {
-    drawPomodoro(index, dots[(index < countPomodoros % 8) ^ ((countPomodoros / 8) % 2)]);
+    drawPomodoro(index, dots[(index < currentCountPomodoros() % 8) ^ ((currentCountPomodoros() / 8) % 2)]);
   }
 }
 
@@ -225,14 +235,14 @@ void updateTimerCounter(uint16_t totalTime) {
 }
 
 void updateCompletedTimerPomodoros() {
-  uint8_t countCompletedPomodoros = countPomodoros - 1;
+  uint8_t countCompletedPomodoros = currentCountPomodoros() - 1;
   uint8_t index = countCompletedPomodoros % 8;
   drawPomodoro(index, dots[((countCompletedPomodoros / 8) + 1) % 2]);
 }
 
 void showCurrentTimerPomodoro() {
-  uint8_t index = countPomodoros % 8;
-  drawPomodoro(index, dots[2 + (countPomodoros / 8) % 2]);
+  uint8_t index = currentCountPomodoros() % 8;
+  drawPomodoro(index, dots[2 + (currentCountPomodoros() / 8) % 2]);
 }
 
 void drawNumbers(uint8_t topLeft, uint8_t topRight, uint8_t bottomLeft, uint8_t bottomRight) {

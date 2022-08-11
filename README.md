@@ -127,7 +127,7 @@ This is free, open-source peripheral. If you'd like to support the development o
 
 ## License
 ```
-Copyright (C) 2021  ES Factory
+Copyright (C) 2021  ES factory
 
 ES Timer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

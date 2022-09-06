@@ -95,16 +95,16 @@ Congratulations 🎉, your ES Timer is ready to use.
 
 | Definition | description |
 | :--- | :--- |
-| [`SYSTEM_OS`](/ESTimer.ino#L8) | To go to the Lock screen, you must specify your operating system type (WINDOWS or LINUX or MACOS). |
-| [`INCLUDE_OLED`](/ESTimer.ino#L10) | Change it to true if you assemble monitor version. |
-| [`ADDRESS_OLED`](/ESTimer.ino#L11) | Usually the ssd1306 address is this value, but if your ssd1306 value was different you can change it (use Digispark_Examples/i2cScanner to get it). |
-| [`BRIGHTNESS_OLED`](/ESTimer.ino#L12) | In the range 0 to 1, where 1 is the maximum OLED brightness and 0 means it is completely off. |
-| [`FLIP_CONTENT_OLED`](/ESTimer.ino#L13) | If you have connect your ES Timer to usb port of right side of computer should change it to true. |
-| [`WORK_DURATION`](/ESTimer.ino#L15) | The duration of each work can be a maximum of 99 minutes, which you can use up to a second accuracy. |
-| [`SHORT_BREAK_DURATION`](/ESTimer.ino#L16) | The duration of each short break can be a maximum of one-fifth work time, which you can use up to a second accuracy. |
-| [`LONG_BREAK_RATE`](/ESTimer.ino#L17) | There should be take a long break after all four pomodoros, which is four times the short break by default. |
-| [`SHORT_BREAK_COUNTER`](/ESTimer.ino#L18]) | The method of counting short break for long break, STATIC according by done pomodoros, DYNAMIC after plugging timet to system. |
-| [`PAUSABLE_WORK_PHASE`](/ESTimer.ino#L19) | If you want the work phase counter to pause when the timer is unplugged and resume it when again plugged, change it to true. |
+| [`SYSTEM_OS`](/ESTimer.ino#L24) | To go to the Lock screen, you must specify your operating system type (WINDOWS or LINUX or MACOS). |
+| [`INCLUDE_OLED`](/ESTimer.ino#L26) | Change it to true if you assemble monitor version. |
+| [`ADDRESS_OLED`](/ESTimer.ino#L27) | Usually the ssd1306 address is this value, but if your ssd1306 value was different you can change it (use Digispark_Examples/i2cScanner to get it). |
+| [`BRIGHTNESS_OLED`](/ESTimer.ino#L28) | In the range 0 to 1, where 1 is the maximum OLED brightness and 0 means it is completely off. |
+| [`FLIP_CONTENT_OLED`](/ESTimer.ino#L29) | If you have connect your ES Timer to usb port of right side of computer should change it to true. |
+| [`WORK_DURATION`](/ESTimer.ino#L31) | The duration of each work can be a maximum of 99 minutes, which you can use up to a second accuracy. |
+| [`SHORT_BREAK_DURATION`](/ESTimer.ino#L32) | The duration of each short break can be a maximum of one-fifth work time, which you can use up to a second accuracy. |
+| [`LONG_BREAK_RATE`](/ESTimer.ino#L33) | There should be take a long break after all four pomodoros, which is four times the short break by default. |
+| [`SHORT_BREAK_COUNTER`](/ESTimer.ino#L34]) | The method of counting short break for long break, STATIC according by done pomodoros, DYNAMIC after plugging timet to system. |
+| [`PAUSABLE_WORK_PHASE`](/ESTimer.ino#L35) | If you want the work phase counter to pause when the timer is unplugged and resume it when again plugged, change it to true. |
 
 ## Demos
 
